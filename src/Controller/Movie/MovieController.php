@@ -11,10 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route(path: "/movies", name: "movies")]
 class MovieController extends AbstractController
 {
-    #[Route(path: "/category", name: "movie_category")]
-    public function category(): Response
+    public function movies(): Response
     {
-        return $this->render("movie/category.html.twig");
+        return $this->render("movie/discover.html.twig");
     }
 
     #[Route(path: "/detail", name: "movie_detail")]
