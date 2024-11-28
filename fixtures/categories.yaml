@@ -1,0 +1,20 @@
+App\Entity\Category:
+    category_action:
+        name: 'Action'
+        label: 'Films et séries d''action'
+    
+    category_aventure:
+        name: 'Aventure'
+        label: 'Films et séries d''aventure'
+    
+    category_comedie:
+        name: 'Comédie'
+        label: 'Films et séries de comédie'
+    
+    category_drame:
+        name: 'Drame'
+        label: 'Films et séries dramatiques'
+    
+    category_sf:
+        name: 'Science-Fiction'
+        label: 'Films et séries de science-fiction'

@@ -1,0 +1,6 @@
+App\Entity\User:
+    user_{1..5}:
+        username: '<username()>'
+        email: '<email()>'
+        password: '\$2y\$13\$hojriZ6Ws.l0D6.wqA3y8eXd6r0HuztxD1//1.7FYBAp.zzDAU9LG' # password123
+        accountStatus: !php/const App\Enum\UserAccountStatusEnum::ACTIVE

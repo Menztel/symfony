@@ -1,0 +1,20 @@
+App\Entity\Language:
+    language_fr:
+        name: 'Français'
+        code: 'FR'
+    
+    language_en:
+        name: 'Anglais'
+        code: 'EN'
+    
+    language_es:
+        name: 'Espagnol'
+        code: 'ES'
+    
+    language_de:
+        name: 'Allemand'
+        code: 'DE'
+    
+    language_it:
+        name: 'Italien'
+        code: 'IT'

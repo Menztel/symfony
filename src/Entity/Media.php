@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enum\MediaTypeEnum;
 use App\Repository\MediaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,6 +40,18 @@ class Media
 
     #[ORM\Column]
     private array $castt = [];
+
+    #[ORM\ManyToMany(targetEntity: Category::class)]
+    private Collection $categories;
+
+    #[ORM\ManyToMany(targetEntity: Language::class)]
+    private Collection $languages;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+        $this->languages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -124,6 +138,54 @@ class Media
     public function setCastt(array $castt): static
     {
         $this->castt = $castt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->languages;
+    }
+
+    public function addLanguage(Language $language): static
+    {
+        if (!$this->languages->contains($language)) {
+            $this->languages->add($language);
+        }
+
+        return $this;
+    }
+
+    public function removeLanguage(Language $language): static
+    {
+        $this->languages->removeElement($language);
 
         return $this;
     }
