@@ -4,13 +4,16 @@ namespace App\Entity;
 
 use App\Enum\UserAccountStatusEnum;
 use App\Repository\UserRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -121,5 +124,23 @@ class User
         }
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        // By default, every user has the ROLE_USER
+        return ['ROLE_USER'];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Optional: If you store temporary sensitive data, remove it here
+        // For example, if you had a plain text password field, you'd clear it here
+    }
+
+    public function getUserIdentifier(): string
+    {
+        // Use email as the unique identifier
+        return $this->email;
     }
 }
