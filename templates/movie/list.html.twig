@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Films - Streemi{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Films</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for movie in movies %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    {% if movie.coverImage %}
+                        <img src="{{ movie.coverImage }}" alt="{{ movie.title }}" class="w-full h-48 object-cover">
+                    {% endif %}
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold mb-2">{{ movie.title }}</h2>
+                        <p class="text-gray-600 mb-4">{{ movie.shortDescription }}</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            {% for category in movie.categories %}
+                                <a href="{{ path('category_detail', {'id': category.id}) }}" 
+                                   class="bg-red-100 text-red-600 px-2 py-1 rounded-full text-sm hover:bg-red-200">
+                                    {{ category.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">{{ movie.releaseDate|date('Y') }}</span>
+                            <a href="{{ path('movie_detail', {'id': movie.id}) }}" 
+                               class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                                Voir plus
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="col-span-3 text-center text-gray-500">Aucun film disponible</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -29,6 +28,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     #[ORM\Column(enumType: UserAccountStatusEnum::class)]
     private ?UserAccountStatusEnum $accountStatus = null;
 
@@ -41,6 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->roles = ['ROLE_USER'];
     }
 
     public function getId(): ?int
@@ -128,19 +131,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        // By default, every user has the ROLE_USER
-        return ['ROLE_USER'];
+        $roles = $this->roles;
+        return array_unique($roles);
     }
 
-    public function eraseCredentials(): void
+    public function setRoles(array $roles): static
     {
-        // Optional: If you store temporary sensitive data, remove it here
-        // For example, if you had a plain text password field, you'd clear it here
+        $this->roles = $roles;
+        return $this;
     }
 
     public function getUserIdentifier(): string
     {
-        // Use email as the unique identifier
         return $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Nothing to do here
     }
 }

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Abonnements - Streemi{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Nos abonnements</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for subscription in subscriptions %}
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-red-600 text-white p-6">
+                        <h2 class="text-2xl font-bold mb-2">{{ subscription.name }}</h2>
+                        <p class="text-4xl font-bold">{{ subscription.price }}€<span class="text-base font-normal">/mois</span></p>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-4">
+                            <li class="flex items-center">
+                                <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Durée : {{ subscription.durationInMonths }} mois
+                            </li>
+                        </ul>
+                        <button class="w-full bg-red-600 text-white rounded-lg py-3 px-6 mt-6 hover:bg-red-700 transition duration-200">
+                            Choisir {{ subscription.name }}
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

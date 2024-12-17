@@ -7,14 +7,10 @@ use App\Entity\Language;
 use App\Entity\Media;
 use App\Entity\Movie;
 use App\Entity\Playlist;
-use App\Entity\PlaylistMedia;
-use App\Entity\PlaylistSubscription;
 use App\Entity\User;
 use App\Entity\Serie;
 use App\Entity\Subscription;
 use App\Entity\SubscriptionHistory;
-use App\Entity\WatchHistory;
-use App\Entity\Comment;
 use App\Enum\UserAccountStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -42,7 +38,7 @@ class AppFixtures extends Fixture
         $categoryAventure->setLabel('Films et séries d\'aventure');
         $manager->persist($categoryAventure);
 
-        // Création des langues avec une boucle foreach
+        // Création des langues
         $languages = [
             ['name' => 'Français', 'code' => 'FR'],
             ['name' => 'Anglais', 'code' => 'EN'],
@@ -61,16 +57,23 @@ class AppFixtures extends Fixture
         }
 
         // Création des utilisateurs
-        $users = [];
-        for ($i = 1; $i <= 5; $i++) {
-            $user = new User();
-            $user->setUsername("user$i");
-            $user->setEmail("user$i@example.com");
-            $user->setPassword($this->passwordHasher->hashPassword($user, 'password123'));
-            $user->setAccountStatus(UserAccountStatusEnum::ACTIVE);
-            $manager->persist($user);
-            $users[] = $user;
-        }
+        $user = new User();
+        $user->setUsername('user');
+        $user->setEmail('user@example.com');
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
+        $user->setPassword($hashedPassword);
+        $user->setAccountStatus(UserAccountStatusEnum::ACTIVE);
+        $user->setRoles(['ROLE_USER']);
+        $manager->persist($user);
+
+        $admin = new User();
+        $admin->setUsername('admin');
+        $admin->setEmail('admin@example.com');
+        $hashedPassword = $this->passwordHasher->hashPassword($admin, 'admin');
+        $admin->setPassword($hashedPassword);
+        $admin->setAccountStatus(UserAccountStatusEnum::ACTIVE);
+        $admin->setRoles(['ROLE_ADMIN']);
+        $manager->persist($admin);
 
         // Création des abonnements
         $subscriptions = [];
@@ -83,16 +86,6 @@ class AppFixtures extends Fixture
             $subscriptions[] = $subscription;
         }
 
-        // Création des historiques d'abonnement
-        foreach ($users as $user) {
-            $subscriptionHistory = new SubscriptionHistory();
-            $subscriptionHistory->setUser($user);
-            $subscriptionHistory->setSubscription($subscriptions[array_rand($subscriptions)]);
-            $subscriptionHistory->setStartDate(new \DateTime());
-            $subscriptionHistory->setEndDate((new \DateTime())->modify('+1 month'));
-            $manager->persist($subscriptionHistory);
-        }
-
         // Création des médias (films et séries)
         $allMedias = [];
         
@@ -101,7 +94,7 @@ class AppFixtures extends Fixture
             [
                 'title' => 'The Shawshank Redemption',
                 'shortDescription' => 'Two imprisoned men bond over a number of years.',
-                'longDescription' => 'Over the course of several years, two convicts form a friendship.',
+                'longDescription' => 'Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion.',
                 'releaseDate' => '1994-09-23',
                 'coverImage' => 'shawshank_redemption.jpg',
                 'staff' => ['Frank Darabont'],
@@ -145,19 +138,16 @@ class AppFixtures extends Fixture
             $movie->setCoverImage($movieData['coverImage']);
             $movie->setStaff($movieData['staff']);
             $movie->setCastt($movieData['castt']);
-            $movie->addCategory($categoryAction);
-            $movie->addLanguage($languageObjects[0]); // Français
-            $movie->addLanguage($languageObjects[1]); // Anglais
             $manager->persist($movie);
             $allMedias[] = $movie;
         }
 
-        // Séries
+        // Création des séries
         $series = [
             [
                 'title' => 'Breaking Bad',
                 'shortDescription' => 'A high school chemistry teacher turned methamphetamine manufacturer.',
-                'longDescription' => 'A high school chemistry teacher diagnosed with cancer turns to crime.',
+                'longDescription' => 'A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family\'s future.',
                 'releaseDate' => '2008-01-20',
                 'coverImage' => 'breaking_bad.jpg',
                 'staff' => ['Vince Gilligan'],
@@ -201,53 +191,7 @@ class AppFixtures extends Fixture
             $serie->setCoverImage($serieData['coverImage']);
             $serie->setStaff($serieData['staff']);
             $serie->setCastt($serieData['castt']);
-            $serie->addCategory($categoryAventure);
-            $serie->addLanguage($languageObjects[0]); // Français
-            $serie->addLanguage($languageObjects[1]); // Anglais
             $manager->persist($serie);
-            $allMedias[] = $serie;
-        }
-
-        // Création des playlists et liaison avec les médias
-        foreach ($users as $user) {
-            $playlist = new Playlist();
-            $playlist->setName("Playlist de " . $user->getUsername());
-            $playlist->setDescription("Playlist personnelle");
-            $playlist->setUser($user);
-            $manager->persist($playlist);
-
-            // Ajout aléatoire de médias à la playlist
-            $randomMedias = array_rand($allMedias, min(3, count($allMedias)));
-            foreach ((array)$randomMedias as $mediaIndex) {
-                $playlistMedia = new PlaylistMedia();
-                $playlistMedia->setPlaylist($playlist);
-                $playlistMedia->setMedia($allMedias[$mediaIndex]);
-                $manager->persist($playlistMedia);
-            }
-        }
-
-        // Création des commentaires
-        foreach ($allMedias as $media) {
-            foreach (array_rand($users, 2) as $userIndex) {
-                $comment = new Comment();
-                $comment->setContent("Commentaire sur " . $media->getTitle());
-                $comment->setMedia($media);
-                $comment->setAuthor($users[$userIndex]);
-                $comment->setCreatedAt(new \DateTime());
-                $manager->persist($comment);
-            }
-        }
-
-        // Création des historiques de visionnage
-        foreach ($users as $user) {
-            foreach (array_rand($allMedias, 3) as $mediaIndex) {
-                $watchHistory = new WatchHistory();
-                $watchHistory->setUser($user);
-                $watchHistory->setMedia($allMedias[$mediaIndex]);
-                $watchHistory->setWatchedAt(new \DateTime());
-                $watchHistory->setDuration(rand(10, 120));
-                $manager->persist($watchHistory);
-            }
         }
 
         $manager->flush();

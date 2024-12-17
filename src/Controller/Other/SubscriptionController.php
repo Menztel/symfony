@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace App\Controller\Other;
 
+use App\Repository\SubscriptionRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route("/subscription")]
 class SubscriptionController extends AbstractController
 {
-    #[Route(path: "/subscriptions", name: "show")]
-    public function show(): Response
+    #[Route("/", name: "subscription_list")]
+    public function list(SubscriptionRepository $subscriptionRepository): Response
     {
-        return $this->render("other/abonnement.html.twig");
+        $subscriptions = $subscriptionRepository->findAll();
+        
+        return $this->render('other/subscription/list.html.twig', [
+            'subscriptions' => $subscriptions
+        ]);
     }
 }

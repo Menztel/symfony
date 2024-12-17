@@ -1,0 +1,22 @@
+App\Entity\Movie:
+    movie_shawshank:
+        title: 'The Shawshank Redemption'
+        shortDescription: 'Two imprisoned men bond over a number of years.'
+        longDescription: 'Over the course of several years, two convicts form a friendship, seeking consolation and eventual redemption through basic compassion.'
+        releaseDate: '<dateTime("1994-09-23")>'
+        coverImage: 'shawshank_redemption.jpg'
+        staff: [['role': 'director', 'name': 'Frank Darabont'], ['role': 'producer', 'name': 'Niki Marvin']]
+        cast: [['role': 'Andy Dufresne', 'name': 'Tim Robbins'], ['role': 'Red', 'name': 'Morgan Freeman']]
+        categories: ['@category_drame']
+        languages: ['@language_en', '@language_fr']
+    
+    movie_inception:
+        title: 'Inception'
+        shortDescription: 'A thief who steals corporate secrets through dream-sharing technology.'
+        longDescription: 'A skilled thief is offered a chance to regain his old life as payment for a task considered to be impossible: inception, the implantation of another person''s idea into a target''s subconscious.'
+        releaseDate: '<dateTime("2010-07-16")>'
+        coverImage: 'inception.jpg'
+        staff: [['role': 'director', 'name': 'Christopher Nolan'], ['role': 'producer', 'name': 'Emma Thomas']]
+        cast: [['role': 'Cobb', 'name': 'Leonardo DiCaprio'], ['role': 'Arthur', 'name': 'Joseph Gordon-Levitt']]
+        categories: ['@category_sf']
+        languages: ['@language_en', '@language_fr']

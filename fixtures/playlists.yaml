@@ -1,0 +1,5 @@
+App\Entity\Playlist:
+    playlist_{1..10}:
+        name: '<words(3, true)>'
+        createdAt: '<dateTimeBetween("-1 year", "now")>'
+        updatedAt: '<dateTimeBetween($createdAt, "now")>'

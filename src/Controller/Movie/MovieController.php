@@ -4,27 +4,36 @@ declare(strict_types=1);
 
 namespace App\Controller\Movie;
 
+use App\Entity\Media;
+use App\Entity\Movie;
+use App\Repository\MediaRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route(path: "/movies", name: "movies")]
+#[Route("/movie")]
 class MovieController extends AbstractController
 {
-    public function movies(): Response
+    #[Route("/", name: "movie_list")]
+    public function list(MediaRepository $mediaRepository): Response
     {
-        return $this->render("movie/discover.html.twig");
+        $movies = $mediaRepository->findAll();
+        $movies = array_filter($movies, fn($media) => $media instanceof Movie);
+        
+        return $this->render("movie/list.html.twig", [
+            'movies' => $movies
+        ]);
     }
 
-    #[Route(path: "/detail", name: "movie_detail")]
-    public function detail(): Response
+    #[Route("/{id}", name: "movie_detail")]
+    public function detail(Media $media): Response
     {
-        return $this->render("movie/detail.html.twig");
-    }
+        if (!($media instanceof Movie)) {
+            throw $this->createNotFoundException('Ce média n\'est pas un film');
+        }
 
-    #[Route(path: "/detailserie", name: "detail_serie")]
-    public function detailSerie(): Response
-    {
-        return $this->render("movie/detail_serie.html.twig");
+        return $this->render("movie/detail.html.twig", [
+            'movie' => $media
+        ]);
     }
 }

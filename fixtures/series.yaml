@@ -1,0 +1,22 @@
+App\Entity\Serie:
+    serie_breaking_bad:
+        title: 'Breaking Bad'
+        shortDescription: 'A high school chemistry teacher turned methamphetamine manufacturer.'
+        longDescription: 'A high school chemistry teacher diagnosed with cancer turns to crime.'
+        releaseDate: '<dateTime("2008-01-20")>'
+        coverImage: 'breaking_bad.jpg'
+        staff: [['role': 'creator', 'name': 'Vince Gilligan'], ['role': 'producer', 'name': 'Mark Johnson']]
+        cast: [['role': 'Walter White', 'name': 'Bryan Cranston'], ['role': 'Jesse Pinkman', 'name': 'Aaron Paul']]
+        categories: ['@category_drame']
+        languages: ['@language_en', '@language_fr']
+    
+    serie_stranger_things:
+        title: 'Stranger Things'
+        shortDescription: 'When a young boy disappears, his mother and friends must confront terrifying forces.'
+        longDescription: 'In a small town, a group of kids face supernatural forces and secret government exploits.'
+        releaseDate: '<dateTime("2016-07-15")>'
+        coverImage: 'stranger_things.jpg'
+        staff: [['role': 'creator', 'name': 'The Duffer Brothers'], ['role': 'producer', 'name': 'Shawn Levy']]
+        cast: [['role': 'Eleven', 'name': 'Millie Bobby Brown'], ['role': 'Mike Wheeler', 'name': 'Finn Wolfhard']]
+        categories: ['@category_sf']
+        languages: ['@language_en', '@language_fr']

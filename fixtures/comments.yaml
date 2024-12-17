@@ -1,0 +1,5 @@
+App\Entity\Comment:
+    comment_{1..20}:
+        content: '<text(200)>'
+        status: '<randomElement(["pending", "approved", "rejected"])>'
+        author: '@user_*'

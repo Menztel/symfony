@@ -1,0 +1,7 @@
+App\Entity\WatchHistory:
+    watch_history_{1..50}:
+        user: '@user_*'
+        media: '@media_*'
+        watchedAt: '<dateTimeBetween("-1 year", "now")>'
+        duration: '<numberBetween(1, 180)>'
+        completed: '<boolean(70)>'

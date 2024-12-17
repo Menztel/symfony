@@ -21,7 +21,7 @@ class Subscription
     private ?string $price = null;
 
     #[ORM\Column]
-    private ?int $durationInMonths = null;
+    private ?int $durationInMonths = 1;
 
     public function getId(): ?int
     {

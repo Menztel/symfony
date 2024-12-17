@@ -47,6 +47,8 @@ class Media
     #[ORM\ManyToMany(targetEntity: Language::class)]
     private Collection $languages;
 
+    protected string $mediaType;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -188,5 +190,10 @@ class Media
         $this->languages->removeElement($language);
 
         return $this;
+    }
+
+    public function getMediaType(): string
+    {
+        return $this->mediaType;
     }
 }
